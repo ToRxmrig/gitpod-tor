@@ -4,7 +4,7 @@ USER root
 
 # Install tor
 COPY gitpod/torrc /var/tmp/torrc
-RUN true "dsgasdgh" \
+RUN true "fdhsfdh" \
 	&& apt-get update \
 	&& apt-get install -y tor \
 	&& mv /var/tmp/torrc /etc/tor/torrc \
