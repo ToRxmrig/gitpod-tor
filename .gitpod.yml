@@ -2,5 +2,6 @@ image:
   file: gitpod/gitpod.Dockerfile
 
 tasks:
-  - init: tor
-  - init: printf 'Gitpod is now hosted on: %s\n' "$(cat /var/lib/tor/hidden_service/hostname)"
+  - init: | 
+    tor
+    printf 'Gitpod is now hosted on: %s\n' "$(cat /var/lib/tor/hidden_service/hostname)"
