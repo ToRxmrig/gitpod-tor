@@ -3,6 +3,6 @@ FROM gitpod/workspace-full
 USER root
 
 # Install tor
-RUN \
+RUN true "" \
 	&& apt-get update \
 	&& apt-get install -y tor
