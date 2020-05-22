@@ -5,6 +5,5 @@ USER root
 # Install tor
 RUN true "" \
 	&& apt-get update \
-	&& apt-get install -y tor \
-	&& usermod -a -G debian-tor gitpod \
-	&& chmod g+rwx /var/lib/tor
+	&& apt-get install -y tor
+COPY gitpod/torrc /etc/tor/torrc
