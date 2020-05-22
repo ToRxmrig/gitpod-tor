@@ -2,4 +2,5 @@ image:
   file: gitpod/gitpod.Dockerfile
 
 tasks:
-  - init: tor
+  - init: printf '%s\n' meh
+    command: tor
