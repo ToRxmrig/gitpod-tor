@@ -7,4 +7,4 @@ RUN true "" \
 	&& apt-get update \
 	&& apt-get install -y tor \
 	&& usermod -a -G debian-tor gitpod \
-	&& chown g+rwd /var/lib/tor
+	&& chmod g+rwx /var/lib/tor
