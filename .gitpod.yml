@@ -3,4 +3,5 @@ image:
 
 tasks:
   - command: tor
-  - command: printf 'Gitpod is now hosted on: %s\n' "$(cat /var/lib/tor/hidden_service/hostname)"
+  - command: printf 'Gitpod is now hosted on %s\n' "$(cat /var/lib/tor/hidden_service/hostname)"
+    openMode: split-right
