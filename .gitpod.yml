@@ -3,5 +3,5 @@ image:
 
 tasks:
   - init: | 
-    tor
-    printf 'Gitpod is now hosted on: %s\n' "$(cat /var/lib/tor/hidden_service/hostname)"
+      tor
+      printf 'Gitpod is now hosted on: %s\n' "$(cat /var/lib/tor/hidden_service/hostname)"
