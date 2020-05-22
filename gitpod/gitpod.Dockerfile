@@ -8,4 +8,6 @@ RUN true "dsgasdgh" \
 	&& apt-get update \
 	&& apt-get install -y tor \
 	&& mv /var/tmp/torrc /etc/tor/torrc \
+	&& usermod -a -G debian-tor gitpod \
+	&& chmod g+rwx /var/lib/tor \
 	&& service tor start
